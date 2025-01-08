@@ -1,0 +1,102 @@
+[
+    {
+        "id": 1,
+        "author": "Albert Einstein",
+        "quote": "Life is like riding a bicycle. To keep your balance, you must keep moving."
+    },
+    {
+        "id": 2,
+        "author": "Isaac Newton",
+        "quote": "If I have seen further, it is by standing on the shoulders of giants."
+    },
+    {
+        "id": 3,
+        "author": "Marie Curie",
+        "quote": "Nothing in life is to be feared; it is only to be understood."
+    },
+    {
+        "id": 4,
+        "author": "Mark Twain",
+        "quote": "The secret of getting ahead is getting started."
+    },
+    {
+        "id": 5,
+        "author": "Stephen Hawking",
+        "quote": "However difficult life may seem, there is always something you can do and succeed at."
+    },
+    {
+        "id": 6,
+        "author": "Aristotle",
+        "quote": "The more you know, the more you realize you don't know."
+    },
+    {
+        "id": 7,
+        "author": "Leonardo da Vinci",
+        "quote": "Learning never exhausts the mind."
+    },
+    {
+        "id": 8,
+        "author": "Socrates",
+        "quote": "The only true wisdom is in knowing you know nothing."
+    },
+    {
+        "id": 9,
+        "author": "Galileo Galilei",
+        "quote": "You cannot teach a man anything; you can only help him find it within himself."
+    },
+    {
+        "id": 10,
+        "author": "Carl Sagan",
+        "quote": "Somewhere, something incredible is waiting to be known."
+    },
+    {
+        "id": 11,
+        "author": "Nikola Tesla",
+        "quote": "The present is theirs; the future, for which I really worked, is mine."
+    },
+    {
+        "id": 12,
+        "author": "Ada Lovelace",
+        "quote": "That brain of mine is something more than merely mortal; as time goes on, I feel that I am more and more a part of the future."
+    },
+    {
+        "id": 13,
+        "author": "Richard Feynman",
+        "quote": "If you can’t explain something to a first-year student, then you haven’t really understood it."
+    },
+    {
+        "id": 14,
+        "author": "Charles Darwin",
+        "quote": "It is not the strongest of the species that survive, nor the most intelligent, but the one most responsive to change."
+    },
+    {
+        "id": 15,
+        "author": "Rosalind Franklin",
+        "quote": "Science and everyday life cannot and should not be separated."
+    },
+    {
+        "id": 16,
+        "author": "Katherine Johnson",
+        "quote": "We will always have challenges to face, but as long as we keep pushing forward, we can overcome them."
+    },
+    {
+        "id": 17,
+        "author": "Marie Curie",
+        "quote": "I am one of those who think like Nobel, that humanity will draw more good than evil from new discoveries."
+    },
+    {
+        "id": 18,
+        "author": "Albert Einstein",
+        "quote": "Imagination is more important than knowledge. For knowledge is limited, whereas imagination embraces the entire world."
+    },
+    {
+        "id": 19,
+        "author": "Alan Turing",
+        "quote": "We may hope that machines will eventually compete with men in all purely intellectual fields."
+    },
+    {
+        "id": 20,
+        "author": "Thomas Edison",
+        "quote": "Genius is one percent inspiration and ninety-nine percent perspiration."
+    }
+]
