@@ -11,7 +11,7 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t random-quote-api .'
+                sh ''DOCKER_BUILDKIT=1 docker build -t random-quote-api .'
             }
         }
 
