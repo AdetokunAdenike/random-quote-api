@@ -72,7 +72,7 @@ To run the application in a Docker container:
 ## Testing
 
 To run unit tests:
-   ```bash
+    ```bash
    pytest
 
 ## License
