@@ -62,7 +62,7 @@ To run the application in a Docker container:
 
 ## CI/CD Pipeline
 
-- **CI/CD Authomation**: Implemented using jenkins.
+- **CI/CD Automation**: Implemented using jenkins.
 - **Pipeline Stages**:
     1. **Checkout Code**: Pulls the latest code from the repository.
     2. **Build Docker Image**: Creates a Docker image of the application.
