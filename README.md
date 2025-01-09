@@ -69,16 +69,16 @@ To run the application in a Docker container:
     3. **Run Unit Tests**: Executes automated tests to ensure code quality.
     4. **Deploy Application**: Deploys the Docker container.
 
+## Testing
+
+    To run unit tests:
+       ```bash
+       pytest
+
+
 ## License
 
 This project is licensed under the <a href="License" >MIT Licence</a>.
-
-## Testing
-
-To run unit tests:
-```bash
-    pytest
-
 
 
 
