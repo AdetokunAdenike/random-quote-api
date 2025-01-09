@@ -4,7 +4,8 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-                git branch: 'main', url: 'https://github.com/AdetokunAdenike/random-quote-api.git'
+                git branch: 'master', url: 'https://github.com/AdetokunAdenike/random-quote-api.git',
+                credentialsId: 'github-credentials'
             }
         }
 
