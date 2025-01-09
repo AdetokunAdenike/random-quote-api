@@ -41,7 +41,7 @@ To set up the project locally:
    ```bash
    python app.py
 
-5. **Access the API: Open your browser or use a tool like curl or Postman to interact with the API at:
+5. **Access the API: Open your browser or use a tool like curl or Postman to interact with the API at**:
    ```arduino
    http:127.0.0.1:5000
 
@@ -62,7 +62,7 @@ To run the application in a Docker container:
 
 ## CI/CD Pipeline
 
-- **CI/CD Authomation**: Implemented using jenkins**.
+- **CI/CD Authomation**: Implemented using jenkins.
 - **Pipeline Stages**:
     1. **Checkout Code**: Pulls the latest code from the repository.
     2. **Build Docker Image**: Creates a Docker image of the application.
