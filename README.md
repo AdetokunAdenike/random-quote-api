@@ -71,7 +71,7 @@ To run the application in a Docker container:
 
 ## Testing
 
-    To run unit tests:
+To run unit tests:
        ```bash
        pytest
 
