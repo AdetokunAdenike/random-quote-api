@@ -1,4 +1,5 @@
 # Random Quote API
+## Currently working on making this better. 
 
 A RESTful API that provides random quotes. This project demonstrates backend development with Python (Flask) and CI/CD automation using Jenkins and Docker.
 
