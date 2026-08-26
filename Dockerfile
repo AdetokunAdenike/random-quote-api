@@ -1,17 +1,13 @@
-# Use the official Python image as the base
-FROM python:3.8-slim
+FROM python:3.12-slim
 
-# Set the working directory in the container
 WORKDIR /app
 
-# Copy project files into the container
-COPY . /app
+COPY pyproject.toml .
 
-# Install project dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir .
 
-# Expose port 5000 for the Flask application
+COPY app.py quotes.json ./
+
 EXPOSE 5000
 
-# Run the Flask application
-CMD ["python", "app.py"]
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "app:app"]
