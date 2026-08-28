@@ -1,28 +1,35 @@
 pipeline {
     agent any
 
+    environment {
+        IMAGE_NAME = 'random-quote-api'
+        IMAGE_TAG = "${BUILD_NUMBER}"
+    }
+
     stages {
+
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
 
         stage('Build Docker Image') {
             steps {
-                sh 'DOCKER_BUILDKIT=1 docker build -t random-quote-api .'
+                sh '''
+                    DOCKER_BUILDKIT=1 docker build \
+                        -t ${IMAGE_NAME}:${IMAGE_TAG} \
+                        .
+                '''
             }
         }
 
-        stage('Run Unit Tests') {
-            steps {
-                sh 'docker run --rm random-quote-api pytest'
-            }
-        }
-
-        stage('Deploy Application') {
+        stage('Run Tests') {
             steps {
                 sh '''
-                    docker rm -f random-quote-api-container || true
-                    docker run -d \
-                        --name random-quote-api-container \
-                        -p 5000:5000 \
-                        random-quote-api
+                    docker run --rm \
+                        ${IMAGE_NAME}:${IMAGE_TAG} \
+                        pytest
                 '''
             }
         }
@@ -30,11 +37,12 @@ pipeline {
 
     post {
         success {
-            echo 'Pipeline executed successfully!'
+            echo "CI pipeline completed successfully!"
+            echo "Docker image: ${IMAGE_NAME}:${IMAGE_TAG}"
         }
 
         failure {
-            echo 'Pipeline failed. Check logs for details.'
+            echo 'CI pipeline failed. Check the logs for details.'
         }
     }
 }
