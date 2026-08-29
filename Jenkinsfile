@@ -46,11 +46,10 @@ pipeline {
                 sh '''
                     docker run --rm \
                         -v /var/run/docker.sock:/var/run/docker.sock \
-                        aquasec/trivy:0.74.0 \
-                        image \
+                        aquasec/trivy:0.74.0 image \
                         --severity HIGH,CRITICAL \
                         --exit-code 1 \
-                        random-quote-api:${BUILD_NUMBER}
+                        random-quote-api:${BUILD_NUMBER}.0
                 '''
             }
         }
