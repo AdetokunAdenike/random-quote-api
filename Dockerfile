@@ -1,13 +1,28 @@
-FROM python:3.12-slim
+FROM python:3.12-alpine AS test
 
 WORKDIR /app
 
 COPY pyproject.toml .
 
-RUN pip install --no-cache-dir ".[test]"
+RUN apk upgrade --no-cache \
+    && pip install --no-cache-dir --upgrade pip \
+    && pip install --no-cache-dir ".[test]"
 
 COPY app.py quotes.json ./
 COPY tests ./tests
+
+
+FROM python:3.12-alpine AS production
+
+WORKDIR /app
+
+COPY pyproject.toml .
+
+RUN apk upgrade --no-cache \
+    && pip install --no-cache-dir . \
+    && pip uninstall -y pip
+
+COPY app.py quotes.json ./
 
 EXPOSE 5000
 

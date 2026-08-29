@@ -4,17 +4,18 @@ pipeline {
     environment {
         IMAGE_NAME = 'random-quote-api'
         IMAGE_TAG = "${BUILD_NUMBER}.0"
+        TEST_IMAGE = "${IMAGE_NAME}:test-${BUILD_NUMBER}"
     }
 
     stages {
 
-        stage('Build Docker Image') {
+        stage('Build Test Image') {
             steps {
                 sh '''
-                    DOCKER_BUILDKIT=1 docker build \
+                    docker build \
                         --pull \
-                        -t ${IMAGE_NAME}:${IMAGE_TAG} \
-                        .
+                        --target test \
+                        -t ${TEST_IMAGE} .
                 '''
             }
         }
@@ -23,8 +24,19 @@ pipeline {
             steps {
                 sh '''
                     docker run --rm \
-                        ${IMAGE_NAME}:${IMAGE_TAG} \
+                        ${TEST_IMAGE} \
                         pytest
+                '''
+            }
+        }
+
+        stage('Build Production Image') {
+            steps {
+                sh '''
+                    docker build \
+                        --pull \
+                        --target production \
+                        -t ${IMAGE_NAME}:${IMAGE_TAG} .
                 '''
             }
         }
@@ -32,15 +44,12 @@ pipeline {
         stage('Security Scan') {
             steps {
                 sh '''
-                    docker run --rm \
-                        -v /var/run/docker.sock:/var/run/docker.sock \
-                        aquasec/trivy:0.74.0 \
-                        image \
-                        --exit-code 1 \
+                    trivy image \
                         --severity HIGH,CRITICAL \
+                        --exit-code 1 \
                         ${IMAGE_NAME}:${IMAGE_TAG}
                 '''
-    }
+            }
         }
     }
 
