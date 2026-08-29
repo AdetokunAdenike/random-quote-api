@@ -12,6 +12,7 @@ pipeline {
             steps {
                 sh '''
                     DOCKER_BUILDKIT=1 docker build \
+                        --pull \
                         -t ${IMAGE_NAME}:${IMAGE_TAG} \
                         .
                 '''
