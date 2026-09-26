@@ -148,7 +148,7 @@ The Jenkins pipeline is configured to fail if vulnerabilities meeting the config
 
 Amazon Elastic Container Registry (ECR) is used as the container image registry for the application.
 
-The ECR repository is provisioned through Terraform rather than manually through the AWS console.
+The ECR repository is provisioned through Terraform.
 
 Configuration includes:
 
