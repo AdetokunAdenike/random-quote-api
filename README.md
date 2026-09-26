@@ -1,85 +1,318 @@
-# Random Quote API
-Currently working on making this better...25/08/2026 
+# Containerized CI/CD Pipeline & AWS Infrastructure Automation
 
-A REST API that provides random quotes. This project demonstrates backend development with Python (Flask) and CI/CD automation using Jenkins and Docker.
+A containerized Python REST API used to demonstrate a practical DevOps workflow involving Docker, Jenkins CI, container security scanning, AWS infrastructure provisioning, and Infrastructure as Code with Terraform.
 
-## Features
-- **Fetch all quotes**: Retrieve a list of all available quotes.
-- **Fetch a random quote**: Get a random quote from the collection.
-- **Fetch a specific quote by ID**: Query a specific quote using its unique identifier.
+The project is being developed as a reproducible cloud deployment pipeline, with the application and infrastructure managed through version control.
 
-## Technologies Used
-- **Python**: Backend logic and API implementation.
-- **Flask**: Lightweight web framework for building the API.
-- **Jenkins**: CI/CD pipeline automation.
-- **Docker**: Containerization for application deployment.
+## Architecture
 
-## API Endpoints
-| Endpoint               | Method | Description                    |
-|------------------------|--------|--------------------------------|
-| `/api/quotes`          | `GET`  | Get all quotes                |
-| `/api/quotes/random`   | `GET`  | Get a random quote            |
-| `/api/quotes/<id>`     | `GET`  | Get a quote by its ID         |
+```text
+Developer
+   │
+   │ Git Push
+   ▼
+GitHub Repository
+   │
+   ▼
+Jenkins
+   │
+   ├── Build Test Image
+   ├── Run Pytest
+   ├── Build Production Image
+   └── Trivy Security Scan
+   │
+   ▼
+Docker Image
+   │
+   ▼
+Amazon ECR
+   │
+   ▼
+AWS Infrastructure
+   │
+   ├── VPC
+   ├── Public Subnet
+   ├── Internet Gateway
+   ├── Route Table
+   └── ECS Task Security Group
+   │
+   ▼
+ECS/Fargate
+   └── Deployment stage — in progress
+```
 
-## Getting Started
-To set up the project locally:
+## Technologies
 
-1. **Clone the Repository**:
-   ```bash
-   git clone https://github.com/AdetokunAdenike/random-quote-api.git
-   cd random-quote-api
+- Python
+- Flask
+- Pytest
+- Docker
+- Jenkins
+- Groovy / Jenkins Pipeline
+- Trivy
+- Git & GitHub
+- Terraform
+- AWS
+  - Amazon ECR
+  - Amazon VPC
+  - Subnets
+  - Internet Gateway
+  - Route Tables
+  - Security Groups
+  - Amazon ECS/Fargate (planned)
 
-2. **Create a Virtual Environment (Recommended)**:
-   ```bash
-   python3 -m venv env
-   source env/bin/activate
+## Application
 
-3. **Install Dependencies**:
-   ```bash
-   pip install -r requirements.txt
+The application is a simple REST API that provides random quotes.
 
-4. **Run the Application**:
-   ```bash
-   python app.py
+### Endpoints
 
-5. **Access the API: Open your browser or use a tool like curl or Postman to interact with the API at**:
-   ```arduino
-   http:127.0.0.1:5000
+```text
+GET /
+GET /api/quotes
+GET /api/quotes/random
+GET /api/quotes/<id>
+```
 
-## Running with Docker
-To run the application in a Docker container:
+## Docker
 
-1. **Build the Docker Image**:
-   ```bash
-   docker build -t random-quote-api .
+The application is containerized using Docker.
 
-2. **Run the Docker Container**:
-   ```bash
-   docker run -d -p 5000:5000 random-quote-api
+The Docker configuration uses a multi-stage build to separate the testing environment from the production image.
 
-4. **Access the API**: Visit:
-   ```arduino
-   http://127.0.0.1:5000
+### Test image
 
-## CI/CD Pipeline
+```bash
+docker build --target test -t random-quote-api:test .
+```
 
-- **CI/CD Automation**: Implemented using jenkins.
-- **Pipeline Stages**:
-    1. **Checkout Code**: Pulls the latest code from the repository.
-    2. **Build Docker Image**: Creates a Docker image of the application.
-    3. **Run Unit Tests**: Executes automated tests to ensure code quality.
-    4. **Deploy Application**: Deploys the Docker container.
+Tests can then be executed inside the container:
 
-## Testing
+```bash
+docker run --rm random-quote-api:test pytest
+```
 
-1. To run unit tests:
-   ```bash
-   pytest
+### Production image
 
+```bash
+docker build --target production -t random-quote-api:latest .
+```
 
-## License
+The production container runs the application using Gunicorn.
 
-This project is licensed under the <a href="License" >MIT Licence</a>.
+## Jenkins CI Pipeline
 
+Jenkins is used to automate the Continuous Integration workflow.
 
+The current pipeline performs:
 
+```text
+Source Checkout
+      ↓
+Build Test Image
+      ↓
+Run Tests
+      ↓
+Build Production Image
+      ↓
+Trivy Security Scan
+```
+
+### Build Test Image
+
+Jenkins builds the Docker image using the test stage.
+
+### Run Tests
+
+The test image is executed and the application's Pytest test suite is run inside the container.
+
+### Build Production Image
+
+After the tests pass, Jenkins builds the production Docker image.
+
+Images are tagged using the Jenkins build number.
+
+Example:
+
+```text
+random-quote-api:6.0
+```
+
+### Security Scan
+
+Trivy scans the production Docker image for HIGH and CRITICAL vulnerabilities.
+
+The Jenkins pipeline is configured to fail if vulnerabilities meeting the configured severity threshold are detected.
+
+## Amazon ECR
+
+Amazon Elastic Container Registry (ECR) is used as the container image registry for the application.
+
+The ECR repository is provisioned through Terraform rather than manually through the AWS console.
+
+Configuration includes:
+
+- Mutable image tags
+- Scan-on-push enabled
+
+Repository:
+
+```text
+random_quote_api
+```
+
+## Infrastructure as Code
+
+AWS infrastructure is provisioned using Terraform.
+
+The Terraform configuration is maintained under:
+
+```text
+terraform/
+```
+
+The infrastructure is managed through a dedicated Git branch:
+
+```text
+terraform-deployment
+```
+
+This keeps the infrastructure work separate from the application's main development branch.
+
+## AWS Infrastructure Provisioned
+
+### Amazon ECR Repository
+
+Stores Docker images produced by the CI pipeline.
+
+Terraform resource:
+
+```text
+aws_ecr_repository.random_quote_api
+```
+
+### VPC
+
+A custom VPC is created for the application:
+
+```text
+CIDR: 10.0.0.0/16
+```
+
+### Public Subnet
+
+A single public subnet is currently used:
+
+```text
+Availability Zone: eu-north-1a
+CIDR: 10.0.1.0/24
+```
+
+A single Availability Zone is intentional for this learning project to keep the infrastructure simple and minimize unnecessary AWS resources.
+
+### Internet Gateway
+
+An Internet Gateway provides internet connectivity for resources in the public subnet.
+
+### Route Table
+
+A public route table is configured with:
+
+```text
+0.0.0.0/0 → Internet Gateway
+```
+
+### ECS Task Security Group
+
+A security group has been created for the future ECS task.
+
+Current rules:
+
+```text
+Inbound:
+TCP 5000 from 0.0.0.0/0
+
+Outbound:
+All traffic
+```
+
+Port `5000` matches the port exposed by the application container.
+
+## Terraform Workflow
+
+Infrastructure changes are managed using the standard Terraform workflow:
+
+```bash
+terraform init
+terraform fmt
+terraform validate
+terraform plan
+terraform apply
+```
+
+Terraform state files are excluded from Git:
+
+```text
+*.tfstate
+*.tfstate.*
+```
+
+The Terraform provider lock file is committed to version control:
+
+```text
+.terraform.lock.hcl
+```
+
+## Current Progress
+
+### Completed
+
+- [x] Python REST API
+- [x] Automated tests with Pytest
+- [x] Docker containerization
+- [x] Multi-stage Docker build
+- [x] Jenkins CI pipeline
+- [x] Automated Docker image builds
+- [x] Trivy container security scanning
+- [x] Amazon ECR repository
+- [x] Terraform initialization
+- [x] Custom AWS VPC
+- [x] Public subnet
+- [x] Internet Gateway
+- [x] Public route table
+- [x] ECS task security group
+- [x] AWS infrastructure managed through Terraform
+
+### In Progress
+
+- [ ] ECS cluster
+- [ ] ECS Fargate task definition
+- [ ] ECS service
+- [ ] Deploy container to ECS/Fargate
+- [ ] Connect Jenkins CI pipeline to ECR
+- [ ] Automated deployment workflow
+- [ ] Application deployment verification
+
+## Project Goals
+
+The goal of this project is to demonstrate a reproducible DevOps workflow:
+
+```text
+Code
+ ↓
+Git
+ ↓
+Jenkins CI
+ ↓
+Automated Tests
+ ↓
+Docker Build
+ ↓
+Security Scan
+ ↓
+Amazon ECR
+ ↓
+Terraform Infrastructure
+ ↓
+ECS/Fargate Deployment
+```
